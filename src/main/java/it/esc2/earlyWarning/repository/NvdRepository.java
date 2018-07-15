@@ -5,7 +5,7 @@
  */
 package it.esc2.earlyWarning.repository;
 
-import it.esc2.earlyWarning.domain.Cve;
+import it.esc2.earlyWarning.domain.Nvd;
 import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -16,11 +16,11 @@ import org.springframework.stereotype.Repository;
  */
 //@SuppressWarnings("unused")
 @Repository
-public interface ICveRepository extends MongoRepository<Cve, String> {
+public interface NvdRepository extends MongoRepository<Nvd, String> {
 
-    public List<Cve> findByLastModifiedDate(String date);
+    public List<Nvd> findBylastModifiedDate(String date);
 
    // @Query(value = "{'configuration':?0}")
-    public List<Cve> findByConfiguration(Object conf);
+  //  public List<Nvd> findByConfiguration(Object conf);// todo chane object to real object
 
 }

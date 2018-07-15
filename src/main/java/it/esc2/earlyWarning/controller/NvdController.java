@@ -6,8 +6,7 @@
 package it.esc2.earlyWarning.controller;
 
 import it.esc2.earlyWarning.domain.Cve;
-import it.esc2.earlyWarning.domain.VulnVulnerableConfiguration;
-import it.esc2.earlyWarning.repository.ICveRepository;
+
 import java.util.List;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PutMapping;
 import com.codahale.metrics.annotation.Timed;
-import it.esc2.earlyWarning.service.CveService;
-import it.esc2.earlyWarning.service.dto.CveDTO;
+import it.esc2.earlyWarning.domain.Configurations;
+import it.esc2.earlyWarning.domain.Nvd;
+import it.esc2.earlyWarning.service.dto.NvdDTO;
 import javax.validation.Valid;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import java.net.URISyntaxException;
 import javax.inject.Inject;
+import it.esc2.earlyWarning.service.NvdService;
+import it.esc2.earlyWarning.repository.NvdRepository;
 
 /**
  *
@@ -35,66 +37,59 @@ import javax.inject.Inject;
 
 @RestController
 @RequestMapping("/cves")
-public class CveController {
+public class NvdController {
 
-    private final Logger log = LoggerFactory.getLogger(CveController.class);
+    private final Logger log = LoggerFactory.getLogger(NvdController.class);
 
-  @Autowired
-    private CveService cveService;
+  
+    private NvdService nvdService;  
+    private NvdRepository nvdRepository;
 
-  @Autowired
-    private ICveRepository cveRepository;
+    public NvdController(NvdService nvdService, NvdRepository nvdRepository) {
+        this.nvdService = nvdService;
+        this.nvdRepository = nvdRepository;
+    }
+    
+    
 
   
     
     
 
-//    public CveController(ICveRepository cveRepository) {
+//    public NvdController(NvdRepository cveRepository) {
 //        this.cveRepository = cveRepository;
 //    }
+    
+    // Todo call all method just from service 
     @GetMapping("/{id}")
-    public Optional<Cve> findById(@PathVariable("id") String id) {
-        Optional<Cve> cve = this.cveRepository.findById(id);
-        return cve;
+    public Optional<Nvd> findById(@PathVariable("id") String id) {
+        Optional<Nvd> nvd = this.nvdRepository.findById(id);
+        return nvd;
     }
 
     @GetMapping("/vuln/{lastModifiedDate}")
-    public List<Cve> findByLastModifiedDate(@PathVariable("lastModifiedDate") String date) {
-        List<Cve> cveList = this.cveRepository.findByLastModifiedDate(date);
-        return cveList;
+    public List<Nvd> findByLastModifiedDate(@PathVariable("lastModifiedDate") String date) {
+        List<Nvd> nvdList = this.nvdRepository.findBylastModifiedDate(date);
+        return nvdList;
     }
 
     @GetMapping("/all")
-    public List<Cve> getAll() {
-        List<Cve> cves = this.cveRepository.findAll();
-        return cves;
+    public List<Nvd> getAll() {
+        List<Nvd> nvds = this.nvdRepository.findAll();
+        return nvds;
     }
 
-//    @GetMapping("/vuln/{{}}")
-//    public List<Cve> findByConfiguration(@PathVariable("{}") Object conf) {
-//        List<Cve> cveList = this.cveRepository.findByConfiguration(conf);
-//        return cveList;
-//    }
-    /**
-     *
-     * @param configuration
-     * @return
-     */
-    @PostMapping("/vuln")
-    public List<Cve> findByConfiguration(@RequestBody Object configuration) {
-        List<Cve> cveList = this.cveRepository.findByConfiguration(configuration);
-        return cveList;
-    }
+
 
     @PutMapping("/cves/upd")
     @Timed                                          //configurationDTO configurationDTO
-    public CveDTO updateConfiguration(@Valid @RequestBody CveDTO cveDto) throws URISyntaxException {
-        log.debug("REST request to update Sinistri : {}", cveDto);
+    public NvdDTO updateConfiguration(@Valid @RequestBody NvdDTO nvdDto) throws URISyntaxException {
+        log.debug("REST request to update Sinistri : {}", nvdDto);
 //           if (cveDto.getId() == null) {
 //            return createCve(cveDto);
 //        }
 
-        CveDTO result = this.cveService.save(cveDto);
+        NvdDTO result = this.nvdService.save(nvdDto);
         return result;
         
         /*ResponseEntity.ok()

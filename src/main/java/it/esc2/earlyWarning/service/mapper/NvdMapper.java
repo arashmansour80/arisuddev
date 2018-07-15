@@ -6,7 +6,7 @@
 package it.esc2.earlyWarning.service.mapper;
 
 import it.esc2.earlyWarning.domain.*;
-import it.esc2.earlyWarning.service.dto.CveDTO;
+import it.esc2.earlyWarning.service.dto.NvdDTO;
 import java.util.List;
 import org.mapstruct.*;
 
@@ -18,14 +18,14 @@ import org.mapstruct.*;
  * Mapper for the entity Cve and its DTO CveDTO.
  */
 @Mapper(componentModel = "spring", uses = {})
-public interface CveMapper {
+public interface NvdMapper {
 
-    CveDTO CveToCveDTO(Cve Cve);
+    NvdDTO nvdToNvdDTO(Nvd nvd);
 
-    List<CveDTO> CvesToCveDTOs(List<Cve> Cves);
+    List<NvdDTO> nvdsToNvdDTOs(List<Nvd> nvd);
 
-    Cve CveDTOToCve(CveDTO CveDTO);
+    Nvd nvdDTOToNvd(NvdDTO nvdDTO);
 
-    List<Cve> CveDTOsToCves(List<CveDTO> CveDTOs);
+    List<Nvd> nvdDTOsToNvds(List<NvdDTO> nvdDTOs);
 
 }

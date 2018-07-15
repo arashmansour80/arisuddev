@@ -5,8 +5,7 @@
  */
 package it.esc2.earlyWarning.service;
 
-import it.esc2.earlyWarning.service.dto.CveDTO;
-import org.springframework.stereotype.Service;
+import it.esc2.earlyWarning.service.dto.NvdDTO;
 
 /**
  *
@@ -15,13 +14,13 @@ import org.springframework.stereotype.Service;
 /**
  * Service Interface for managing Cve.
  */
-public interface CveService {
+public interface NvdService {
 
     /**
-     * Save a cve.
+     * Save a nvd.
      *
-     * @param cveDTO the entity to save
+     * @param nvdDTO the entity to save
      * @return the persisted entity
      */
-    CveDTO save(CveDTO cveDTO);
+    NvdDTO save(NvdDTO nvdDTO);
 }

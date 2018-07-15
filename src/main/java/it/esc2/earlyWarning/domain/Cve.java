@@ -1,147 +1,127 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package it.esc2.earlyWarning.domain;
 
-import java.util.ArrayList;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
+import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
-/**
- *
- * @author a.mansour
- */
-@Document(collection = "cves")
+@JsonInclude(JsonInclude.Include.NON_NULL)
+@JsonPropertyOrder({
+    "data_type",
+    "data_format",
+    "data_version",
+    "CVE_data_meta",
+    "affects",
+    "problemtype",
+    "references",
+    "description"
+})
+public class Cve implements Serializable
+{
 
-public class Cve {
+    @JsonProperty("data_type")
+    private String dataType;
+    @JsonProperty("data_format")
+    private String dataFormat;
+    @JsonProperty("data_version")
+    private String dataVersion;
+    @JsonProperty("CVE_data_meta")
+    private CVEDataMeta cVEDataMeta;
+    @JsonProperty("affects")
+    private Affects affects;
+    @JsonProperty("problemtype")
+    private Problemtype problemtype;
+    @JsonProperty("references")
+    private References references;
+    @JsonProperty("description")
+    private Description_ description;
+    private final static long serialVersionUID = -5221824655565899898L;
 
-    @Id
-    private String id;
-
-    @Field("vuln:vulnerable-configuration")
-    private Object configuration;
-
-    @Field("vuln:cwe")
-    private Object cwe;
-
-    @Field("vuln:last-modified-datetime")
-    private String lastModifiedDate;
-
-    @Field("vuln:vulnerable-software-list")
-    private VulnVulnerableSoftwareList softwareList;
-
-    @Field("vuln:cvss")
-    private VulnCvss cvss;
-
-    @Field("vuln:references")
-    private ArrayList<VulnReferences> references;
-
-    @Field("id")
-    private String idCve;
-
-    @Field("vuln:summary")
-    private String summary;
-
-    @Field("vuln:published-datetime")
-    private String publishedDate;
-
-    @Field("vuln:cve-id")
-    private String cveId;
-
-    public String getId() {
-        return id;
+    @JsonProperty("data_type")
+    public String getDataType() {
+        return dataType;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    @JsonProperty("data_type")
+    public void setDataType(String dataType) {
+        this.dataType = dataType;
     }
 
-    public String getIdCve() {
-        return idCve;
+    @JsonProperty("data_format")
+    public String getDataFormat() {
+        return dataFormat;
     }
 
-    public void setIdCve(String idCve) {
-        this.idCve = idCve;
+    @JsonProperty("data_format")
+    public void setDataFormat(String dataFormat) {
+        this.dataFormat = dataFormat;
     }
 
-    public String getSummary() {
-        return summary;
+    @JsonProperty("data_version")
+    public String getDataVersion() {
+        return dataVersion;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    @JsonProperty("data_version")
+    public void setDataVersion(String dataVersion) {
+        this.dataVersion = dataVersion;
     }
 
-    public Object getCwe() {
-        return cwe;
+    @JsonProperty("CVE_data_meta")
+    public CVEDataMeta getCVEDataMeta() {
+        return cVEDataMeta;
     }
 
-    public void setCwe(Object cwe) {
-        this.cwe = cwe;
+    @JsonProperty("CVE_data_meta")
+    public void setCVEDataMeta(CVEDataMeta cVEDataMeta) {
+        this.cVEDataMeta = cVEDataMeta;
     }
 
-    public String getLastModifiedDate() {
-        return lastModifiedDate;
+    @JsonProperty("affects")
+    public Affects getAffects() {
+        return affects;
     }
 
-    public void setLastModifiedDate(String lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
+    @JsonProperty("affects")
+    public void setAffects(Affects affects) {
+        this.affects = affects;
     }
 
-    public VulnVulnerableSoftwareList getSoftwareList() {
-        return softwareList;
+    @JsonProperty("problemtype")
+    public Problemtype getProblemtype() {
+        return problemtype;
     }
 
-    public void setSoftwareList(VulnVulnerableSoftwareList softwareList) {
-        this.softwareList = softwareList;
+    @JsonProperty("problemtype")
+    public void setProblemtype(Problemtype problemtype) {
+        this.problemtype = problemtype;
     }
 
-    public Object getConfiguration() {
-        return configuration;
-    }
-
-    public void setConfiguration(Object configuration) {
-        this.configuration = configuration;
-    }
-
-    public VulnCvss getCvss() {
-        return cvss;
-    }
-
-    public void setCvss(VulnCvss cvss) {
-        this.cvss = cvss;
-    }
-
-    public ArrayList<VulnReferences> getReferences() {
+    @JsonProperty("references")
+    public References getReferences() {
         return references;
     }
 
-    public void setReferences(ArrayList<VulnReferences> references) {
+    @JsonProperty("references")
+    public void setReferences(References references) {
         this.references = references;
     }
 
-    public String getPublishedDate() {
-        return publishedDate;
+    @JsonProperty("description")
+    public Description_ getDescription() {
+        return description;
     }
 
-    public void setPublishedDate(String publishedDate) {
-        this.publishedDate = publishedDate;
-    }
-
-    public String getCveId() {
-        return cveId;
-    }
-
-    public void setCveId(String cveId) {
-        this.cveId = cveId;
+    @JsonProperty("description")
+    public void setDescription(Description_ description) {
+        this.description = description;
     }
 
     @Override
     public String toString() {
-        return "Cve{" + "id=" + id + ", configuration=" + configuration + ", cwe=" + cwe + ", lastModifiedDate=" + lastModifiedDate + ", softwareList=" + softwareList + ", cvss=" + cvss + ", references=" + references + ", idCve=" + idCve + ", summary=" + summary + ", publishedDate=" + publishedDate + ", cveId=" + cveId + '}';
+        return new ToStringBuilder(this).append("dataType", dataType).append("dataFormat", dataFormat).append("dataVersion", dataVersion).append("cVEDataMeta", cVEDataMeta).append("affects", affects).append("problemtype", problemtype).append("references", references).append("description", description).toString();
     }
 
 }
