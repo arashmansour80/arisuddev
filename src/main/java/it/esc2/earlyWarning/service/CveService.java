@@ -5,7 +5,7 @@
  */
 package it.esc2.earlyWarning.service;
 
-import it.esc2.earlyWarning.service.dto.NvdDTO;
+import it.esc2.earlyWarning.service.dto.CveDTO;
 
 /**
  *
@@ -14,13 +14,13 @@ import it.esc2.earlyWarning.service.dto.NvdDTO;
 /**
  * Service Interface for managing Cve.
  */
-public interface NvdService {
+public interface CveService {
 
     /**
-     * Save a nvd.
+     * Save a cve.
      *
-     * @param nvdDTO the entity to save
+     * @param cveDTO
      * @return the persisted entity
      */
-    NvdDTO save(NvdDTO nvdDTO);
+    CveDTO save(CveDTO cveDTO);
 }

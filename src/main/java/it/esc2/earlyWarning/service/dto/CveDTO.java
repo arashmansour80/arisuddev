@@ -1,11 +1,15 @@
-package it.esc2.earlyWarning.domain;
+package it.esc2.earlyWarning.service.dto;
 
+import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import java.io.Serializable;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+import it.esc2.earlyWarning.domain.VulnCvss;
+import it.esc2.earlyWarning.domain.VulnCwe;
+import it.esc2.earlyWarning.domain.VulnReferences;
+import it.esc2.earlyWarning.domain.VulnVulnerableConfiguration;
+import it.esc2.earlyWarning.domain.VulnVulnerableSoftwareList;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -21,10 +25,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
     "vuln:published-datetime",
     "vuln:cve-id"
 })
-@Document(collection = "cves")
-public class Cve implements Serializable {
+public class CveDTO implements Serializable {
 
-    @Id
     @JsonProperty("_id")
     private String id;
     @JsonProperty("vuln:vulnerable-configuration")
@@ -161,7 +163,7 @@ public class Cve implements Serializable {
 
     @Override
     public String toString() {
-        return "Cve{" + "id=" + id + ", vulnVulnerableConfiguration=" + vulnVulnerableConfiguration + ", vulnCwe=" + vulnCwe + ", vulnLastModifiedDatetime=" + vulnLastModifiedDatetime + ", vulnVulnerableSoftwareList=" + vulnVulnerableSoftwareList + ", vulnCvss=" + vulnCvss + ", vulnReferences=" + vulnReferences + ", idCve=" + idCve + ", vulnSummary=" + vulnSummary + ", vulnPublishedDatetime=" + vulnPublishedDatetime + ", vulnCveId=" + vulnCveId + '}';
+        return new ToStringBuilder(this).append("id", id).append("vulnVulnerableConfiguration", vulnVulnerableConfiguration).append("vulnCwe", vulnCwe).append("vulnLastModifiedDatetime", vulnLastModifiedDatetime).append("vulnVulnerableSoftwareList", vulnVulnerableSoftwareList).append("vulnCvss", vulnCvss).append("vulnReferences", vulnReferences).append("idCve", idCve).append("vulnSummary", vulnSummary).append("vulnPublishedDatetime", vulnPublishedDatetime).append("vulnCveId", vulnCveId).toString();
     }
 
 }
