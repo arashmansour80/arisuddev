@@ -9,20 +9,43 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
+    "vuln:reference",
+    "vuln:source",
     "xml:lang",
-    "href",
-    "content"
+    "reference_type"
 })
 public class VulnReference implements Serializable
 {
 
+    @JsonProperty("vuln:reference")
+    private VulnReference_ vulnReference;
+    @JsonProperty("vuln:source")
+    private String vulnSource;
     @JsonProperty("xml:lang")
     private String xmlLang;
-    @JsonProperty("href")
-    private String href;
-    @JsonProperty("content")
-    private String content;
-    private final static long serialVersionUID = -5791740020465013643L;
+    @JsonProperty("reference_type")
+    private String referenceType;
+    private final static long serialVersionUID = 7357993151862821565L;
+
+    @JsonProperty("vuln:reference")
+    public VulnReference_ getVulnReference() {
+        return vulnReference;
+    }
+
+    @JsonProperty("vuln:reference")
+    public void setVulnReference(VulnReference_ vulnReference) {
+        this.vulnReference = vulnReference;
+    }
+
+    @JsonProperty("vuln:source")
+    public String getVulnSource() {
+        return vulnSource;
+    }
+
+    @JsonProperty("vuln:source")
+    public void setVulnSource(String vulnSource) {
+        this.vulnSource = vulnSource;
+    }
 
     @JsonProperty("xml:lang")
     public String getXmlLang() {
@@ -34,29 +57,19 @@ public class VulnReference implements Serializable
         this.xmlLang = xmlLang;
     }
 
-    @JsonProperty("href")
-    public String getHref() {
-        return href;
+    @JsonProperty("reference_type")
+    public String getReferenceType() {
+        return referenceType;
     }
 
-    @JsonProperty("href")
-    public void setHref(String href) {
-        this.href = href;
-    }
-
-    @JsonProperty("content")
-    public String getContent() {
-        return content;
-    }
-
-    @JsonProperty("content")
-    public void setContent(String content) {
-        this.content = content;
+    @JsonProperty("reference_type")
+    public void setReferenceType(String referenceType) {
+        this.referenceType = referenceType;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("xmlLang", xmlLang).append("href", href).append("content", content).toString();
+        return new ToStringBuilder(this).append("vulnReference", vulnReference).append("vulnSource", vulnSource).append("xmlLang", xmlLang).append("referenceType", referenceType).toString();
     }
 
 }

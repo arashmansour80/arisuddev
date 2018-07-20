@@ -23,32 +23,32 @@ public class CvssBaseMetrics implements Serializable
 {
 
     @JsonProperty("cvss:confidentiality-impact")
-    private String cvssConfidentialityImpact;
+    private CvssConfidentialityImpact cvssConfidentialityImpact;
     @JsonProperty("cvss:generated-on-datetime")
     private String cvssGeneratedOnDatetime;
     @JsonProperty("cvss:integrity-impact")
-    private String cvssIntegrityImpact;
+    private CvssIntegrityImpact cvssIntegrityImpact;
     @JsonProperty("cvss:source")
     private String cvssSource;
     @JsonProperty("cvss:score")
-    private long cvssScore;
+    private int cvssScore;
     @JsonProperty("cvss:authentication")
-    private String cvssAuthentication;
+    private CvssAuthentication cvssAuthentication;
     @JsonProperty("cvss:availability-impact")
-    private String cvssAvailabilityImpact;
+    private CvssAvailabilityImpact cvssAvailabilityImpact;
     @JsonProperty("cvss:access-vector")
-    private String cvssAccessVector;
+    private CvssAccessVector cvssAccessVector;
     @JsonProperty("cvss:access-complexity")
-    private String cvssAccessComplexity;
-    private final static long serialVersionUID = 8946659252223786446L;
+    private CvssAccessComplexity cvssAccessComplexity;
+    private final static long serialVersionUID = 5963248154691982493L;
 
     @JsonProperty("cvss:confidentiality-impact")
-    public String getCvssConfidentialityImpact() {
+    public CvssConfidentialityImpact getCvssConfidentialityImpact() {
         return cvssConfidentialityImpact;
     }
 
     @JsonProperty("cvss:confidentiality-impact")
-    public void setCvssConfidentialityImpact(String cvssConfidentialityImpact) {
+    public void setCvssConfidentialityImpact(CvssConfidentialityImpact cvssConfidentialityImpact) {
         this.cvssConfidentialityImpact = cvssConfidentialityImpact;
     }
 
@@ -63,12 +63,12 @@ public class CvssBaseMetrics implements Serializable
     }
 
     @JsonProperty("cvss:integrity-impact")
-    public String getCvssIntegrityImpact() {
+    public CvssIntegrityImpact getCvssIntegrityImpact() {
         return cvssIntegrityImpact;
     }
 
     @JsonProperty("cvss:integrity-impact")
-    public void setCvssIntegrityImpact(String cvssIntegrityImpact) {
+    public void setCvssIntegrityImpact(CvssIntegrityImpact cvssIntegrityImpact) {
         this.cvssIntegrityImpact = cvssIntegrityImpact;
     }
 
@@ -83,52 +83,52 @@ public class CvssBaseMetrics implements Serializable
     }
 
     @JsonProperty("cvss:score")
-    public long getCvssScore() {
+    public int getCvssScore() {
         return cvssScore;
     }
 
     @JsonProperty("cvss:score")
-    public void setCvssScore(long cvssScore) {
+    public void setCvssScore(int cvssScore) {
         this.cvssScore = cvssScore;
     }
 
     @JsonProperty("cvss:authentication")
-    public String getCvssAuthentication() {
+    public CvssAuthentication getCvssAuthentication() {
         return cvssAuthentication;
     }
 
     @JsonProperty("cvss:authentication")
-    public void setCvssAuthentication(String cvssAuthentication) {
+    public void setCvssAuthentication(CvssAuthentication cvssAuthentication) {
         this.cvssAuthentication = cvssAuthentication;
     }
 
     @JsonProperty("cvss:availability-impact")
-    public String getCvssAvailabilityImpact() {
+    public CvssAvailabilityImpact getCvssAvailabilityImpact() {
         return cvssAvailabilityImpact;
     }
 
     @JsonProperty("cvss:availability-impact")
-    public void setCvssAvailabilityImpact(String cvssAvailabilityImpact) {
+    public void setCvssAvailabilityImpact(CvssAvailabilityImpact cvssAvailabilityImpact) {
         this.cvssAvailabilityImpact = cvssAvailabilityImpact;
     }
 
     @JsonProperty("cvss:access-vector")
-    public String getCvssAccessVector() {
+    public CvssAccessVector getCvssAccessVector() {
         return cvssAccessVector;
     }
 
     @JsonProperty("cvss:access-vector")
-    public void setCvssAccessVector(String cvssAccessVector) {
+    public void setCvssAccessVector(CvssAccessVector cvssAccessVector) {
         this.cvssAccessVector = cvssAccessVector;
     }
 
     @JsonProperty("cvss:access-complexity")
-    public String getCvssAccessComplexity() {
+    public CvssAccessComplexity getCvssAccessComplexity() {
         return cvssAccessComplexity;
     }
 
     @JsonProperty("cvss:access-complexity")
-    public void setCvssAccessComplexity(String cvssAccessComplexity) {
+    public void setCvssAccessComplexity(CvssAccessComplexity cvssAccessComplexity) {
         this.cvssAccessComplexity = cvssAccessComplexity;
     }
 

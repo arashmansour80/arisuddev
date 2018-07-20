@@ -66,6 +66,10 @@ public class CveController {
     @Timed                                          //configurationDTO configurationDTO
     public CveDTO updateConfiguration(@Valid @RequestBody CveDTO cveDto) throws URISyntaxException {
         log.debug("REST request to update Sinistri : {}", cveDto);
+        
+        
+        cveDto.getVulnCvss().getCvssBaseMetrics().setCvssScore(123);
+        
 //           if (cveDto.getId() == null) {
 //            return createCve(cveDto);
 //        }
@@ -83,4 +87,9 @@ public class CveController {
 //        Cve doc = this.cveRepository.findByIdCve(id);
 //        return doc;
 //    }
+    @GetMapping("/{id}")
+    public Optional<Cve> getById(@PathVariable("id")String id){
+         Optional<Cve> cve = this.cveRepository.findById(id);
+        return cve;
+    }
 }
