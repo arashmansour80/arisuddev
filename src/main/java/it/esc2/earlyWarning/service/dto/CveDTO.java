@@ -2,18 +2,16 @@
 package it.esc2.earlyWarning.service.dto;
 
 import java.io.Serializable;
-import java.util.List;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import it.esc2.earlyWarning.domain.VulnAssessmentCheck;
 import it.esc2.earlyWarning.domain.VulnCvss;
-import it.esc2.earlyWarning.domain.VulnCwe;
-import it.esc2.earlyWarning.domain.VulnReference;
-import it.esc2.earlyWarning.domain.VulnScanner;
-import it.esc2.earlyWarning.domain.VulnVulnerableConfiguration;
 import it.esc2.earlyWarning.domain.VulnVulnerableSoftwareList;
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -33,38 +31,55 @@ import org.apache.commons.lang.builder.ToStringBuilder;
     "idCve",
     "vuln:summary"
 })
+@Document(collection = "cve")
 public class CveDTO implements Serializable
 {
-
+    @Id
     @JsonProperty("_id")
+    @Field("_id")
     private String id;
     @JsonProperty("vuln:cwe")
-    private VulnCwe vulnCwe;
+    @Field("vuln:cwe")    
+    private Object vulnCwe;//private VulnCwe vulnCwe;
     @JsonProperty("vuln:security-protection")
+    @Field("vuln:security-protection")
     private String vulnSecurityProtection;
     @JsonProperty("vuln:vulnerable-software-list")
+    @Field("vuln:vulnerable-software-list")    
     private VulnVulnerableSoftwareList vulnVulnerableSoftwareList;
     @JsonProperty("vuln:cvss")
+    @Field("vuln:cvss")
     private VulnCvss vulnCvss;
     @JsonProperty("vuln:published-datetime")
+    @Field("vuln:published-datetime")
     private String vulnPublishedDatetime;
     @JsonProperty("vuln:cve-id")
+    @Field("vuln:cve-id")
     private String vulnCveId;
     @JsonProperty("vuln:vulnerable-configuration")
-    private VulnVulnerableConfiguration vulnVulnerableConfiguration;
+    @Field("vuln:vulnerable-configuration")
+    private Object vulnVulnerableConfiguration;//private VulnVulnerableConfiguration vulnVulnerableConfiguration;
     @JsonProperty("vuln:discovered-datetime")
+    @Field("vuln:discovered-datetime")
     private String vulnDiscoveredDatetime;
     @JsonProperty("vuln:last-modified-datetime")
+    @Field("vuln:last-modified-datetime")
     private String vulnLastModifiedDatetime;
     @JsonProperty("vuln:scanner")
-    private VulnScanner vulnScanner;
+    @Field("vuln:scanner")
+    private Object vulnScanner;// private VulnScanner vulnScanner;
     @JsonProperty("vuln:assessment_check")
-    private VulnAssessmentCheck vulnAssessmentCheck;
+    @Field("vuln:assessment_check")
+    private Object vulnAssessmentCheck;//private VulnAssessmentCheck vulnAssessmentCheck;
     @JsonProperty("vuln:references")
-    private List<VulnReference> vulnReferences = null;
+    @Field("vuln:references")
+    private Object vulnReferences; // private List<VulnReference> vulnReferences = null;
+    @Indexed
+    @Field("id")
     @JsonProperty("id")
     private String idCve;
     @JsonProperty("vuln:summary")
+    @Field("vuln:summary")
     private String vulnSummary;
     private final static long serialVersionUID = -4821914490890046737L;
 
@@ -78,7 +93,7 @@ public class CveDTO implements Serializable
         this.id = id;
     }
 
-    @JsonProperty("vuln:cwe")
+  /*@JsonProperty("vuln:cwe")
     public VulnCwe getVulnCwe() {
         return vulnCwe;
     }
@@ -86,7 +101,17 @@ public class CveDTO implements Serializable
     @JsonProperty("vuln:cwe")
     public void setVulnCwe(VulnCwe vulnCwe) {
         this.vulnCwe = vulnCwe;
+    }*/
+    
+    //modified to Object
+    @JsonProperty("vuln:cwe")
+    public Object getVulnCwe() {
+        return vulnCwe;
     }
+    @JsonProperty("vuln:cwe")
+    public void setVulnCwe(Object vulnCwe) {
+        this.vulnCwe = vulnCwe;
+    }    
 
     @JsonProperty("vuln:security-protection")
     public String getVulnSecurityProtection() {
@@ -138,7 +163,7 @@ public class CveDTO implements Serializable
         this.vulnCveId = vulnCveId;
     }
 
-    @JsonProperty("vuln:vulnerable-configuration")
+    /*@JsonProperty("vuln:vulnerable-configuration")
     public VulnVulnerableConfiguration getVulnVulnerableConfiguration() {
         return vulnVulnerableConfiguration;
     }
@@ -146,7 +171,18 @@ public class CveDTO implements Serializable
     @JsonProperty("vuln:vulnerable-configuration")
     public void setVulnVulnerableConfiguration(VulnVulnerableConfiguration vulnVulnerableConfiguration) {
         this.vulnVulnerableConfiguration = vulnVulnerableConfiguration;
+    }*/    
+    
+    // modified to Object
+    @JsonProperty("vuln:vulnerable-configuration")
+    public Object getVulnVulnerableConfiguration() {
+        return vulnVulnerableConfiguration;
     }
+
+    @JsonProperty("vuln:vulnerable-configuration")
+    public void setVulnVulnerableConfiguration(Object vulnVulnerableConfiguration) {
+        this.vulnVulnerableConfiguration = vulnVulnerableConfiguration;
+    }    
 
     @JsonProperty("vuln:discovered-datetime")
     public String getVulnDiscoveredDatetime() {
@@ -168,7 +204,7 @@ public class CveDTO implements Serializable
         this.vulnLastModifiedDatetime = vulnLastModifiedDatetime;
     }
 
-    @JsonProperty("vuln:scanner")
+    /*@JsonProperty("vuln:scanner")
     public VulnScanner getVulnScanner() {
         return vulnScanner;
     }
@@ -176,9 +212,21 @@ public class CveDTO implements Serializable
     @JsonProperty("vuln:scanner")
     public void setVulnScanner(VulnScanner vulnScanner) {
         this.vulnScanner = vulnScanner;
-    }
+    }*/
 
-    @JsonProperty("vuln:assessment_check")
+    // modified to Object
+    @JsonProperty("vuln:scanner")
+    public Object getVulnScanner() {
+        return vulnScanner;
+    }
+    @JsonProperty("vuln:scanner")
+    public void setVulnScanner(Object vulnScanner) {
+        this.vulnScanner = vulnScanner;
+    }
+    
+    
+
+    /*@JsonProperty("vuln:assessment_check")
     public VulnAssessmentCheck getVulnAssessmentCheck() {
         return vulnAssessmentCheck;
     }
@@ -186,9 +234,19 @@ public class CveDTO implements Serializable
     @JsonProperty("vuln:assessment_check")
     public void setVulnAssessmentCheck(VulnAssessmentCheck vulnAssessmentCheck) {
         this.vulnAssessmentCheck = vulnAssessmentCheck;
+    }*/
+    // modified to Object
+    @JsonProperty("vuln:assessment_check")
+    public Object getVulnAssessmentCheck() {
+        return vulnAssessmentCheck;
     }
-
-    @JsonProperty("vuln:references")
+    
+    @JsonProperty("vuln:assessment_check")
+    public void setVulnAssessmentCheck(Object vulnAssessmentCheck) {
+        this.vulnAssessmentCheck = vulnAssessmentCheck;
+    }
+    
+    /*@JsonProperty("vuln:references")
     public List<VulnReference> getVulnReferences() {
         return vulnReferences;
     }
@@ -196,7 +254,17 @@ public class CveDTO implements Serializable
     @JsonProperty("vuln:references")
     public void setVulnReferences(List<VulnReference> vulnReferences) {
         this.vulnReferences = vulnReferences;
+    }*/
+    
+    //modified to Object
+    @JsonProperty("vuln:references")
+    public Object getVulnReferences() {
+        return vulnReferences;
     }
+    @JsonProperty("vuln:references")
+    public void setVulnReferences(Object vulnReferences) {
+        this.vulnReferences = vulnReferences;
+    }   
 
     @JsonProperty("id")
     public String getIdCve() {
