@@ -5,25 +5,21 @@
  */
 package it.esc2.earlyWarning.controller;
 
-import it.esc2.earlyWarning.domain.Cve;
-
-import java.util.List;
-import java.util.Optional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PutMapping;
 import com.codahale.metrics.annotation.Timed;
-
-import it.esc2.earlyWarning.service.dto.CveDTO;
-import javax.validation.Valid;
-import org.slf4j.LoggerFactory;
-import org.slf4j.Logger;
-import java.net.URISyntaxException;
+import it.esc2.earlyWarning.domain.Cve;
 import it.esc2.earlyWarning.repository.CveRepository;
 import it.esc2.earlyWarning.service.CveService;
+import it.esc2.earlyWarning.service.dto.CveDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -64,22 +60,32 @@ public class CveController {
 
     @PutMapping("/cves/upd")
     @Timed                                          //configurationDTO configurationDTO
-    public CveDTO updateConfiguration(@Valid @RequestBody CveDTO cveDto) throws URISyntaxException {
+    public ResponseEntity<String> updateConfiguration(@Valid @RequestBody CveDTO cveDto) throws URISyntaxException {
         log.debug("REST request to update Sinistri : {}", cveDto);
-        
-        
-        cveDto.getVulnCvss().getCvssBaseMetrics().setCvssScore(123);
-        
-//           if (cveDto.getId() == null) {
-//            return createCve(cveDto);
-//        }
+        HttpStatus resultStatus = null;
+        CveDTO result = null;
+        try {
+            Cve byvulnCveId = cveRepository.findByvulnCveId(cveDto.getVulnCveId());
+            //Optional<Cve> cveById = cveRepository.findById(cveDto.getIdCve());
+            if(byvulnCveId == null) {
+                result = this.cveService.save(cveDto);
+                resultStatus = HttpStatus.OK;
+                return new ResponseEntity<String>(" new CVE is created "+result.getIdCve(),resultStatus);
+            }
+            else{
 
-        CveDTO result = this.cveService.save(cveDto);
-        return result;
+                cveDto.setId(byvulnCveId.getId());
+                result = this.cveService.save(cveDto);
+                resultStatus = HttpStatus.OK;
+                return new ResponseEntity<String>(" CVE is updated "+result.getIdCve(),resultStatus);
+            }
 
-        /*ResponseEntity.ok()
-                .headers(HeaderUtil.createEntityUpdateAlert("cve", cveDto.getId()))
-                .body(result);*/
+        } catch(Exception e){
+            String message = "Errore INFRASTRUTTURALE durante aggiornare o salvare il cve "+cveDto.getIdCve();
+            log.error(message, e);
+            resultStatus = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<String>("Error in calling the service ",resultStatus);
+        }
     }
 
 //    @GetMapping("/cve/{id}")
