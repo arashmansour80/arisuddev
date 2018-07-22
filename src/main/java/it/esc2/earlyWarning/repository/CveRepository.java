@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 //@SuppressWarnings("unused")
 @Repository
 public interface CveRepository extends MongoRepository<Cve, String> {
+    Cve findByvulnCveId(String vulnCveId);
 
 //    public List<Cve> findBylastModifiedDate(String date);
 //
