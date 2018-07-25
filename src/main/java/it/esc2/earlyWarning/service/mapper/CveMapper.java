@@ -26,6 +26,6 @@ public interface CveMapper {
 
     Cve cveDTOTocve(CveDTO cveDTO);
 
-    List<Cve> cveDTOsToCves(List<CveDTO> cveDTOs);
+    List<Cve> cveDTOsToCves(List<CveDTO> cveDTOs);    
 
 }

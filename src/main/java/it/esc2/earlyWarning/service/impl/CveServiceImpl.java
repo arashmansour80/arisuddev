@@ -46,6 +46,13 @@ public class CveServiceImpl implements CveService {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    @Override
+    public CveDTO searchIdCve(String idCve) {
+        Cve cve = this.cveRepository.findByidCve(idCve);  
+        CveDTO result = cveMapper.cveToCveDTO(cve);
+        return result;
+    }
+
     /**
      * Save a cve.
      *
@@ -60,5 +67,5 @@ public class CveServiceImpl implements CveService {
 //        CveDTO result = cveMapper.cveToCveDTO(cve);
 //        return result;
 //    }
-
+    
 }

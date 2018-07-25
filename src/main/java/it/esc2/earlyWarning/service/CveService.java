@@ -5,6 +5,7 @@
  */
 package it.esc2.earlyWarning.service;
 
+import it.esc2.earlyWarning.domain.Cve;
 import it.esc2.earlyWarning.service.dto.CveDTO;
 
 /**
@@ -23,4 +24,6 @@ public interface CveService {
      * @return the persisted entity
      */
     CveDTO save(CveDTO cveDTO);
+    
+    CveDTO searchIdCve(String idCve);
 }
