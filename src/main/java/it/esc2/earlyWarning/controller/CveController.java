@@ -20,7 +20,21 @@ import java.net.URISyntaxException;
 import java.util.List;
 import java.util.Optional;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import it.esc2.earlyWarning.base.AccessComplexityBase;
+import it.esc2.earlyWarning.base.AccessVectorBase;
+import it.esc2.earlyWarning.base.AuthenticationBase;
+import it.esc2.earlyWarning.base.AvailabilityImpactBase;
+import it.esc2.earlyWarning.base.ConfidentialityImpactBase;
+import it.esc2.earlyWarning.base.IntegrityImpactBase;
 import it.esc2.earlyWarning.domain.QCve;
+import it.esc2.earlyWarning.environmental.AvailabilityImpactEnv;
+import it.esc2.earlyWarning.environmental.CollateralDamagePotentialEnv;
+import it.esc2.earlyWarning.environmental.ConfidentialityImpactEnv;
+import it.esc2.earlyWarning.environmental.IntegrityImpactEnv;
+import it.esc2.earlyWarning.environmental.TargetDistributionEnv;
+import it.esc2.earlyWarning.temporal.Exploitability;
+import it.esc2.earlyWarning.temporal.RemediationLevel;
+import it.esc2.earlyWarning.temporal.ReportConfidence;
 
 /**
  *
@@ -164,5 +178,99 @@ public class CveController {
         CveDTO cveDto = this.cveService.searchIdCve(idcve);
         return cveDto;         
     }
+    
+  
+    
+    public Double temporalScoreEquation(Exploitability exploitability, RemediationLevel remediationLevel, ReportConfidence reportConfidence,
+            ConfidentialityImpactBase ciB, IntegrityImpactBase iiB, AvailabilityImpactBase aiB, AccessComplexityBase acB, AuthenticationBase authB,AccessVectorBase avB){  
+        Double baseScore = baseScoreEquation(ciB, iiB, aiB, acB, authB, avB);
+        Double exploitabilityResult = exploitability.getExploitabilityAmount();
+        Double remediationLevelResult = remediationLevel.getRlAmount();
+        Double reportConfidenceResult = reportConfidence.getRcAmount();
+        return baseScore * exploitabilityResult * remediationLevelResult * reportConfidenceResult;       
+        
+    }
+    // TODO create constant for all values that used here 
+    public Double impactEquation(ConfidentialityImpactBase cib, IntegrityImpactBase iib, AvailabilityImpactBase aib) {
+        Double impact = 10.41 * (1 - (1 - cib.getCiAmount()) * (1 - iib.getIiAmount()) * (1 - aib.getAiAmount()));
+        return impact;
+    }
+    
+    public Double exploitabilityEquation(AccessComplexityBase acb, AuthenticationBase authB,AccessVectorBase avb ){        
+        Double exploitabilityResult = 20 * acb.getAcAmount()*authB.getAuthAmount()*avb.getAvAmount();        
+        return exploitabilityResult;
+    }
+    
+    public Double impactFunction(Double impactResult) {
+        Double impact = null;
+        if (impactResult == 0) {
+            impact = 0.0;
+        } else {
+            impact = 1.176;
+        }
+        return impact;
+    }
+    
+    
+    public Double baseScoreEquation(ConfidentialityImpactBase ciB, IntegrityImpactBase iiB, AvailabilityImpactBase aiB, AccessComplexityBase acB, AuthenticationBase authB, AccessVectorBase avB) {
+        Double baseScoreResult = (0.6 * impactEquation(ciB, iiB, aiB) + 0.4 * exploitabilityEquation(acB, authB, avB) - 1.5) * impactFunction(impactEquation(ciB, iiB, aiB));
+        return baseScoreResult;
+    }
+    
+    
+    public Double adjustedImpactEquation(ConfidentialityImpactBase ciB, ConfidentialityImpactEnv ciE, IntegrityImpactBase iiB, IntegrityImpactEnv iiE, AvailabilityImpactBase aiB, AvailabilityImpactEnv aiE) {
+        Double adjImpactResult = Math.min(10, 10.41 * (1 - (1 - ciB.getCiAmount() - ciE.getCiAmount()) * (1 - iiB.getIiAmount() - iiE.getIiAmount()) * (1 - aiB.getAiAmount() - aiE.getAiAmount())));
+        return adjImpactResult;
+    }
+    
+    
+    // note: for calculating adjusted temporal needs to recalculate temporal, but in base score result we need to use adjust Impact instead of impact.
+    public Double baseScoreAdjustedEquation(ConfidentialityImpactBase ciB, IntegrityImpactBase iiB, AvailabilityImpactBase aiB, AccessComplexityBase acB, AuthenticationBase authB, AccessVectorBase avB,
+            ConfidentialityImpactEnv ciE, IntegrityImpactEnv iiE, AvailabilityImpactEnv aiE) {
+        Double baseScoreAdjustedResult = (0.6 * adjustedImpactEquation(ciB, ciE, iiB, iiE, aiB, aiE) + 0.4 * exploitabilityEquation(acB, authB, avB) - 1.5) * impactFunction(adjustedImpactEquation(ciB, ciE, iiB, iiE, aiB, aiE));
+        return baseScoreAdjustedResult;
+    }
+    
+    
+    // TODO: we can use temporalScoreEquation if pass the basescore as parameter
+    public Double adjustedTemporalEquation(ConfidentialityImpactBase ciB, IntegrityImpactBase iiB, AvailabilityImpactBase aiB, AccessComplexityBase acB,
+            AuthenticationBase authB, AccessVectorBase avB, ConfidentialityImpactEnv ciE, IntegrityImpactEnv iiE, AvailabilityImpactEnv aiE,
+            Exploitability exploitability, RemediationLevel remediationLevel, ReportConfidence reportConfidence) {
+        Double baseScoreAdjustedResult = baseScoreAdjustedEquation(ciB, iiB, aiB, acB, authB, avB, ciE, iiE, aiE);
+        Double exploitabilityResult = exploitability.getExploitabilityAmount();
+        Double remediationLevelResult = remediationLevel.getRlAmount();
+        Double reportConfidenceResult = reportConfidence.getRcAmount();
+        return baseScoreAdjustedResult * exploitabilityResult * remediationLevelResult * reportConfidenceResult;
+    }
 
+    
+    
+    
+    public Double environmentalScoreEquation(ConfidentialityImpactBase ciB, IntegrityImpactBase iiB, AvailabilityImpactBase aiB, AccessComplexityBase acB, AuthenticationBase authB, AccessVectorBase avB,
+            ConfidentialityImpactEnv ciE, IntegrityImpactEnv iiE, AvailabilityImpactEnv aiE, Exploitability exploitability, RemediationLevel remediationLevel, ReportConfidence reportConfidence,
+            CollateralDamagePotentialEnv cdpE, TargetDistributionEnv tdE) {
+        Double adjustedTemporalResult = adjustedTemporalEquation(ciB, iiB, aiB, acB, authB, avB, ciE, iiE, aiE, exploitability, remediationLevel, reportConfidence);
+
+        Double envScoreResult = (adjustedTemporalResult + (10 - adjustedTemporalResult) * cdpE.getCdpAmoubt()) * tdE.getTdAmount();
+        return envScoreResult;
+    }
+    
+    
+    
+    @GetMapping("/te")
+    public void firstTest(){
+        // Double test1 = baseScoreEquation(ConfidentialityImpactBase.PARTIAL, IntegrityImpactBase.COMPLETE, AvailabilityImpactBase.COMPLETE, AccessComplexityBase.LOW, AuthenticationBase.NO_AUTHENTICATION, AccessVectorBase.NETWORK_ACCESSIBLE);
+       // Double res = baseScoreAdjustedEquation(ConfidentialityImpactBase.PARTIAL, IntegrityImpactBase.COMPLETE, AvailabilityImpactBase.COMPLETE, AccessComplexityBase.LOW, AuthenticationBase.NO_AUTHENTICATION, AccessVectorBase.NETWORK_ACCESSIBLE, ConfidentialityImpactEnv.LOW, IntegrityImpactEnv.LOW, AvailabilityImpactEnv.LOW);
+        environmentalScoreEquation(ConfidentialityImpactBase.PARTIAL, IntegrityImpactBase.COMPLETE, AvailabilityImpactBase.COMPLETE, AccessComplexityBase.LOW, AuthenticationBase.NO_AUTHENTICATION, AccessVectorBase.NETWORK_ACCESSIBLE, ConfidentialityImpactEnv.LOW, IntegrityImpactEnv.LOW, AvailabilityImpactEnv.LOW, Exploitability.UNPROVEN, RemediationLevel.NOT_DEFINED, ReportConfidence.UNCONFIRMED, CollateralDamagePotentialEnv.NONE, TargetDistributionEnv.NONE);
+        log.debug("end");
+    }
+    
+    
+    
+    
+    
+    
+    
+   
+    
 }
