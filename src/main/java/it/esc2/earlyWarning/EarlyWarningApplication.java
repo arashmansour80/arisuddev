@@ -3,6 +3,7 @@ package it.esc2.earlyWarning;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,13 +20,14 @@ import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 //@Configuration
 //@EnableAutoConfiguration
 //@ComponentScan
-public class EarlyWarningApplication {
+
+public class EarlyWarningApplication extends SpringBootServletInitializer {
 
     public static void main(String[] args) {
         SpringApplication.run(EarlyWarningApplication.class, args);
     }
-    
-     //remove _class
+
+    //remove _class when you write on db
     @Bean
     public MongoTemplate mongoTemplate(MongoDbFactory mongoDbFactory, MongoMappingContext context) {
 
@@ -35,4 +37,4 @@ public class EarlyWarningApplication {
         return mongoTemplate;
 
     }
-}
+    }

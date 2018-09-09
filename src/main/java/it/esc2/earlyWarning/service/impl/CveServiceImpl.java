@@ -5,7 +5,9 @@
  */
 package it.esc2.earlyWarning.service.impl;
 
+import com.querydsl.core.types.dsl.BooleanExpression;
 import it.esc2.earlyWarning.domain.Cve;
+import it.esc2.earlyWarning.domain.QCve;
 import it.esc2.earlyWarning.service.dto.CveDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.springframework.stereotype.Service;
 import it.esc2.earlyWarning.service.mapper.CveMapper;
 import it.esc2.earlyWarning.repository.CveRepository;
 import it.esc2.earlyWarning.service.CveService;
+import java.util.List;
 
 /**
  *
@@ -48,9 +51,25 @@ public class CveServiceImpl implements CveService {
 
     @Override
     public CveDTO searchIdCve(String idCve) {
-        Cve cve = this.cveRepository.findByidCve(idCve);  
+        Cve cve = this.cveRepository.findByidCve(idCve);
         CveDTO result = cveMapper.cveToCveDTO(cve);
         return result;
+    }
+
+    @Override
+    public List<CveDTO> searchByCpeName(String cpeName) {
+        log.info("get list of cve by passing the cpe name with the name of :"+ cpeName);
+        List<CveDTO> cveDTOList = null;
+        QCve qcve = new QCve("cve");
+        BooleanExpression filter = qcve.vulnVulnerableSoftwareList.vulnProduct.contains(cpeName);
+        List<Cve> filterResult = (List<Cve>) this.cveRepository.findAll(filter);
+        log.info("I have found: "+filterResult.size() +" CVE .");
+        
+        if (filterResult != null && !filterResult.isEmpty()) {
+            cveDTOList = this.cveMapper.cvesToCveDTOs(filterResult);
+        }
+        return cveDTOList;
+
     }
 
     /**
@@ -67,5 +86,4 @@ public class CveServiceImpl implements CveService {
 //        CveDTO result = cveMapper.cveToCveDTO(cve);
 //        return result;
 //    }
-    
 }

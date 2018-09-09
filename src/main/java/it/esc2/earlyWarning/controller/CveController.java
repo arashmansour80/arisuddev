@@ -32,6 +32,10 @@ import it.esc2.earlyWarning.environmental.CollateralDamagePotentialEnv;
 import it.esc2.earlyWarning.environmental.ConfidentialityImpactEnv;
 import it.esc2.earlyWarning.environmental.IntegrityImpactEnv;
 import it.esc2.earlyWarning.environmental.TargetDistributionEnv;
+import it.esc2.earlyWarning.service.CpeService;
+import it.esc2.earlyWarning.service.SwlService;
+import it.esc2.earlyWarning.service.dto.CpeDTO;
+import it.esc2.earlyWarning.service.dto.SwlDTO;
 import it.esc2.earlyWarning.temporal.Exploitability;
 import it.esc2.earlyWarning.temporal.RemediationLevel;
 import it.esc2.earlyWarning.temporal.ReportConfidence;
@@ -48,10 +52,14 @@ public class CveController {
 
     private CveService cveService;
     private CveRepository cveRepository;
+    private SwlService swlService;
+    private CpeService cpeService;
 
-    public CveController(CveService cveService, CveRepository cveRepository) {
+    public CveController(CveService cveService, CveRepository cveRepository,SwlService swlService, CpeService cpeService) {
         this.cveService = cveService;
         this.cveRepository = cveRepository;
+        this.swlService = swlService;
+        this.cpeService = cpeService;
     }
 
     // Todo call all method just from service 
@@ -178,6 +186,41 @@ public class CveController {
         CveDTO cveDto = this.cveService.searchIdCve(idcve);
         return cveDto;         
     }
+    
+    // find cpe2.3 name from sw collection by software name
+    @GetMapping("/sw/{name}")
+    public SwlDTO findCpeName(@PathVariable("name") String swName)throws Exception{ // // TODO manage exeption and response Entity   and move it to new controller
+        SwlDTO searchBySoftwareName = this.swlService.searchBySoftwareName(swName);
+        return searchBySoftwareName;
+    }
+    
+    // find cpe from cpe collection by cpe2.3 name
+    @GetMapping("/cpe/{name}")
+    public CpeDTO findCpe(@PathVariable("name") String cpeName) throws Exception{ // // TODO manage exeption and response Entity   and move it to new controller
+        CpeDTO searchByCpe23 = this.cpeService.searchByCpe23(cpeName);
+        return searchByCpe23;
+    }
+    
+    // get cve by passing software name
+    @GetMapping("/cves/{software}")
+    public List<CveDTO> findCveBySoftware(@PathVariable("software") String swName ) throws Exception{// TODO manage exeption and response Entity
+        SwlDTO cpeNameFromSwl = findCpeName(swName);
+        CpeDTO cpe = findCpe(cpeNameFromSwl.getCpe());
+        List<CveDTO> cveListResult = findCveByCpe(cpe.getName());  
+        if(cveListResult == null){
+            log.info("there is not any cve with the software name :"+swName);
+        }
+        return cveListResult;
+    }
+    
+    @GetMapping("/cve/{cpe}")
+    public List<CveDTO> findCveByCpe(@PathVariable("cpe") String cpeName) throws Exception{ // TODO manage exeption and response Entity
+        List<CveDTO> cveListResult = this.cveService.searchByCpeName(cpeName);
+        return cveListResult;
+        
+    }
+    
+    
     
   
     

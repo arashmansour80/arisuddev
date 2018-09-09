@@ -5,8 +5,8 @@
  */
 package it.esc2.earlyWarning.service;
 
-import it.esc2.earlyWarning.domain.Cve;
 import it.esc2.earlyWarning.service.dto.CveDTO;
+import java.util.List;
 
 /**
  *
@@ -26,4 +26,6 @@ public interface CveService {
     CveDTO save(CveDTO cveDTO);
     
     CveDTO searchIdCve(String idCve);
+    
+    List <CveDTO> searchByCpeName(String cpeName);
 }
